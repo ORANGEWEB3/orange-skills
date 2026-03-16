@@ -4,13 +4,6 @@ Portable OpenClaw skills and instructions for Orange auth, MCP/CLI usage, and Or
 
 ## For Humans
 
-Paste this into your LLM agent:
-
-```text
-Install and configure orange-skills by following the instructions here:
-[installation guide](docs/guide/installation.md)
-```
-
 Direct installation guide: [docs/guide/installation.md](docs/guide/installation.md)
 
 ## For LLM Agents
