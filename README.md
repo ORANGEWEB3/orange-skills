@@ -1,6 +1,6 @@
 # orange-skills
 
-Portable OpenClaw skills and instructions for running Orange XP workflows with clear policy gates, daily idempotency rules, and external scheduler examples.
+Portable OpenClaw skills and instructions for Orange auth, MCP/CLI usage, and Orange XP workflows with clear policy gates, daily idempotency rules, and external scheduler examples.
 
 ## For Humans
 
@@ -8,18 +8,25 @@ Paste this into your LLM agent:
 
 ```text
 Install and configure orange-skills by following the instructions here:
-<raw-url-to-docs/guide/installation.md>
+https://raw.githubusercontent.com/ORANGEWEB3/orange-skills/refs/heads/main/docs/guide/installation.md
 ```
 
-Replace the placeholder with the real raw GitHub URL after publishing. If this repo is only local for now, point the agent at `docs/guide/installation.md` directly.
+Direct installation guide: `https://raw.githubusercontent.com/ORANGEWEB3/orange-skills/refs/heads/main/docs/guide/installation.md`
 
 ## For LLM Agents
 
-Read `docs/guide/installation.md` and follow it.
+Fetch the installation guide with `curl` and follow it:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ORANGEWEB3/orange-skills/refs/heads/main/docs/guide/installation.md
+```
+
+Prefer the raw file instead of summarized web fetches so the exact commands and paths stay intact.
 
 ## What This Repo Contains
 
 - `skills/orange-xp-daily-tasks/` - main execution skill for daily or on-demand Orange XP task runs
+- `skills/orange-auth-cli/` - token-based auth, MCP setup, and CLI guidance for `@orangeweb3/mcp-orange-api`
 - `skills/orange-instructions/` - setup and validation instructions for wiring these skills into an OpenClaw workspace
 - `scripts/install-skills.sh` - copies the packaged skills into an OpenClaw workspace
 - `docs/guide/installation.md` - handoff doc another LLM can follow
@@ -54,6 +61,9 @@ workspace/
     orange-xp-daily-tasks/
       SKILL.md
       references/
+    orange-auth-cli/
+      SKILL.md
+      references/
     orange-instructions/
       SKILL.md
       references/
@@ -66,6 +76,13 @@ workspace/
 3. Create a wrapper command that invokes the target OpenClaw run with the `orange-xp-daily-tasks` skill.
 4. Schedule that wrapper with cron, launchd, systemd, or another external scheduler.
 5. Persist completion state so the agent can skip already-completed tasks for the current UTC day.
+
+## Typical Flow
+
+1. Use `orange-instructions` to install the skills and wire scheduling.
+2. Use `orange-auth-cli` to configure auth and MCP access.
+3. Use `orange-xp-daily-tasks` for the actual daily run.
+4. If your OpenClaw setup supports `ulw` or `ultrawork`, combine it with the task prompt for longer autonomous execution.
 
 ## Verification Checklist
 

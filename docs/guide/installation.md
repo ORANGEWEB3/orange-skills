@@ -14,6 +14,16 @@ If the agent can access raw GitHub files, give it the raw URL to this document i
 
 Follow these steps.
 
+### Step 0: Fetch this guide correctly
+
+Prefer the raw file with `curl` so command snippets and file paths stay exact:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/ORANGEWEB3/orange-skills/refs/heads/main/docs/guide/installation.md
+```
+
+Do not rely on summarized fetches when exact shell commands matter.
+
 ### Step 1: Identify the target OpenClaw workspace
 
 Find the workspace root that should receive the skills.
@@ -36,9 +46,25 @@ After copying, verify the workspace contains:
 
 ```text
 skills/
+  orange-auth-cli/
   orange-xp-daily-tasks/
   orange-instructions/
 ```
+
+### Step 2b: Set up Orange auth and MCP access
+
+Use `orange-auth-cli` for the auth layer.
+
+The main reference is:
+
+- `skills/orange-auth-cli/references/cli-and-mcp.md`
+
+That reference includes:
+
+- `orange-auth` CLI login and session commands
+- `@orangeweb3/mcp-orange-api` install commands
+- OpenClaw MCP config examples
+- supported MCP tool names for auth and project flows
 
 ### Step 3: Set up durable state
 
@@ -85,9 +111,12 @@ Then choose one example from `examples/` and adapt it.
 Verify all of the following:
 
 - the OpenClaw run command is real, not a placeholder
+- auth works through the configured CLI or MCP path
 - the agent can load `orange-xp-daily-tasks`
 - the run writes completion state to the durable ledger
 - a second run on the same UTC day skips already-completed daily tasks
+
+If the target harness supports `ulw` or `ultrawork`, it is reasonable to include that in the run prompt for longer autonomous execution. Do not assume every OpenClaw setup supports that keyword.
 
 ### Step 6: Explain the guarantee clearly
 
