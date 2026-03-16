@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.orange.xp.daily</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/absolute/path/to/orange-skills/examples/run-orange-xp-daily.sh</string>
+    </array>
+    <key>StartCalendarInterval</key>
+    <dict>
+      <key>Hour</key>
+      <integer>9</integer>
+      <key>Minute</key>
+      <integer>15</integer>
+    </dict>
+    <key>WorkingDirectory</key>
+    <string>/absolute/path/to/openclaw-workspace</string>
+    <key>StandardOutPath</key>
+    <string>/absolute/path/to/orange-skills/state/launchd.out.log</string>
+    <key>StandardErrorPath</key>
+    <string>/absolute/path/to/orange-skills/state/launchd.err.log</string>
+    <key>RunAtLoad</key>
+    <false/>
+  </dict>
+</plist>

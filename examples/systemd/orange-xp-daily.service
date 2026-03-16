@@ -1,0 +1,7 @@
+[Unit]
+Description=Run Orange XP OpenClaw workflow
+
+[Service]
+Type=oneshot
+WorkingDirectory=/absolute/path/to/openclaw-workspace
+ExecStart=/absolute/path/to/orange-skills/examples/run-orange-xp-daily.sh

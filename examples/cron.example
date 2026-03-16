@@ -1,0 +1,2 @@
+# Run once daily at 09:15 UTC.
+15 9 * * * /absolute/path/to/orange-xp-openclaw-skills/examples/run-orange-xp-daily.sh >> /absolute/path/to/orange-xp-openclaw-skills/state/cron.log 2>&1

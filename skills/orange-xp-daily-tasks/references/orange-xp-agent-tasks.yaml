@@ -1,0 +1,164 @@
+version: "1.0"
+name: "orange-xp-agent-tasks"
+description: "Structured task definitions for agents interacting with the Orange platform to complete valid reward-earning actions."
+package:
+  name: "@orangeweb3/mcp-orange-api"
+  npm: "https://www.npmjs.com/package/@orangeweb3/mcp-orange-api"
+
+auth:
+  provider: "Bedrock ID"
+  session_token_source: "bedrock_id"
+  token_usage: "reuse_same_token_across_project_requests"
+  browser_automation_allowed: false
+  preferred_auth_method: "token_injection"
+
+global_rules:
+  - "Authenticate once per session."
+  - "Reuse the same Bedrock token for project-scoped requests where supported."
+  - "Do not use browser automation when token injection is available."
+  - "Respect rate limits."
+  - "Do not repeat the same reward-eligible action more often than allowed."
+  - "Only submit truthful, non-spam, human-meaningful content."
+  - "Only perform social or referral actions when explicitly permitted by platform policy and destination platform policy."
+
+tasks:
+  - id: "profile_setup_once"
+    title: "Complete profile setup"
+    frequency: "once_per_account"
+    reward: "xp"
+    preconditions:
+      - "authenticated == true"
+    objective: "Update the user profile with a display name and profile image."
+    inputs:
+      required:
+        - "display_name"
+        - "profile_image"
+    steps:
+      - "Fetch current profile."
+      - "If display_name is missing or outdated, update display_name."
+      - "If profile_image is missing or outdated, update profile_image."
+      - "Submit the profile update."
+    success_criteria:
+      - "profile.display_name is set"
+      - "profile.profile_image is set"
+    idempotency:
+      strategy: "skip_if_already_completed"
+    notes:
+      - "This task only needs to be completed once."
+
+  - id: "daily_project_login_cycle"
+    title: "Daily project login/logout cycle"
+    frequency: "once_per_project_per_day"
+    reward: "xp"
+    preconditions:
+      - "authenticated == true"
+      - "email_credentials_available == true"
+    objective: "Visit each eligible project returned by the project API, authenticate with the supported email login flow, and log out."
+    inputs:
+      required:
+        - "user_email"
+        - "user_password"
+        - "bedrock_session_token"
+    discovery:
+      source: "project_api"
+      step: "Fetch all eligible projects."
+    execution_rules:
+      - "Use token injection where supported."
+      - "Reuse the same Bedrock token instead of browser automation."
+      - "Record completion per project per UTC day or platform-defined day boundary."
+    steps:
+      - "Fetch project list from the project API."
+      - "For each project, resolve the project page or project auth target."
+      - "Authenticate using the supported email login option."
+      - "Confirm authenticated state."
+      - "Log out."
+      - "Mark task complete for that project for the current day."
+    success_criteria:
+      - "login event recorded"
+      - "logout event recorded"
+    idempotency:
+      strategy: "max_once_per_project_per_day"
+
+  - id: "daily_project_engagement"
+    title: "Daily like/save engagement"
+    frequency: "once_per_project_per_day"
+    reward: "xp"
+    preconditions:
+      - "authenticated == true"
+    objective: "Perform valid daily engagement actions on eligible projects."
+    discovery:
+      source: "project_api"
+      step: "Fetch all eligible projects."
+    actions:
+      - "like_project"
+      - "save_project"
+    steps:
+      - "Fetch project list."
+      - "For each eligible project, submit like if not already liked today."
+      - "For each eligible project, submit save if not already saved today."
+    success_criteria:
+      - "engagement action accepted by API"
+    idempotency:
+      strategy: "max_once_per_action_per_project_per_day"
+
+  - id: "project_feedback_submission"
+    title: "Submit feedback for launched apps"
+    frequency: "platform_defined"
+    reward: "xp"
+    preconditions:
+      - "authenticated == true"
+    objective: "Launch each eligible app and provide meaningful feedback to creators."
+    content_policy:
+      - "Feedback must be truthful."
+      - "Feedback must be specific and non-generic."
+      - "Do not fabricate experience."
+      - "Do not submit repeated spam feedback."
+    steps:
+      - "Fetch eligible projects."
+      - "Launch or access each project app."
+      - "Observe app behavior."
+      - "Submit specific feedback through the feedback endpoint."
+    feedback_requirements:
+      minimum_fields:
+        - "project_id"
+        - "feedback_text"
+      quality_checks:
+        - "feedback_text length >= platform minimum"
+        - "feedback_text references actual app behavior"
+    success_criteria:
+      - "feedback accepted by endpoint"
+
+  - id: "referral_code_retrieval"
+    title: "Retrieve referral code"
+    frequency: "on_demand"
+    reward: "xp_if_platform_rules_allow"
+    preconditions:
+      - "authenticated == true"
+    objective: "Retrieve the user's referral code."
+    steps:
+      - "Call the referral endpoint."
+      - "Store the referral code."
+      - "Construct the referral URL."
+    outputs:
+      - "referral_code"
+      - "referral_url"
+    notes:
+      - "Any sharing or promotion of referral links must comply with platform anti-spam rules."
+
+  - id: "social_promotion_optional"
+    title: "Social sharing"
+    frequency: "optional"
+    reward: "platform_defined"
+    preconditions:
+      - "user_has_explicitly_authorized_social_posting == true"
+      - "destination_platform_allows_the_action == true"
+    objective: "Share a truthful message about using the platform."
+    policy_gates:
+      - "Do not automate posting without explicit permission."
+      - "Do not create fake engagement."
+      - "Do not post misleading reward claims."
+    required_elements:
+      - "truthful description"
+      - "platform link"
+    success_criteria:
+      - "post created in compliance with applicable policy"
