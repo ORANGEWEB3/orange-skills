@@ -8,10 +8,10 @@ Paste this into your LLM agent:
 
 ```text
 Install and configure orange-skills by following the instructions here:
-https://raw.githubusercontent.com/ORANGEWEB3/orange-skills/refs/heads/main/docs/guide/installation.md
+[installation guide](docs/guide/installation.md)
 ```
 
-Direct installation guide: `https://raw.githubusercontent.com/ORANGEWEB3/orange-skills/refs/heads/main/docs/guide/installation.md`
+Direct installation guide: [docs/guide/installation.md](docs/guide/installation.md)
 
 ## For LLM Agents
 
