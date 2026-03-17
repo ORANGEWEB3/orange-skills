@@ -2,6 +2,14 @@
 
 Portable OpenClaw skills and instructions for Orange auth, MCP/CLI usage, and Orange XP workflows with clear policy gates, daily idempotency rules, and external scheduler examples.
 
+## 2-Minute Quickstart
+
+1. Clone this repo.
+2. Install the skills into your OpenClaw workspace with `./scripts/install-skills.sh /path/to/openclaw-workspace`.
+3. Set Orange auth env vars or MCP config using `skills/orange-auth-cli/references/cli-and-mcp.md`.
+4. Run one dry run with your configured wrapper command from `examples/run-orange-xp-daily.sh`.
+5. Verify the completion ledger updates and that a second same-day run skips completed work.
+
 ## For Humans
 
 Direct installation guide: [docs/guide/installation.md](docs/guide/installation.md)
