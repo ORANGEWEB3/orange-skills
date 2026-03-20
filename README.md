@@ -1,6 +1,6 @@
 # orange-skills
 
-Portable OpenClaw skills and instructions for Orange auth, MCP/CLI usage, and Orange XP workflows with clear policy gates, daily idempotency rules, and external scheduler examples.
+Portable OpenClaw skills and instructions for Orange auth, MCP/CLI usage, and Orange XP workflows with clear policy gates, daily idempotency rules, and external scheduler examples. Interact with project on https://app.orangeweb3.com
 
 ## 2-Minute Quickstart
 
